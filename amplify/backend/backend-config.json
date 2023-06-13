@@ -1,0 +1,22 @@
+{
+  "api": {
+    "amplifyDatasource": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2024-06-12T23:06:40.271Z",
+              "apiKeyExpirationDays": 365,
+              "description": "ice gainz products"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  }
+}
