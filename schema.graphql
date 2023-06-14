@@ -1,0 +1,310 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type ModelNoteConnection {
+  items: [Note]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+type ModelTaskConnection {
+  items: [Task]!
+  nextToken: String
+  startedAt: AWSTimestamp
+}
+
+type Mutation {
+  createNote(condition: ModelNoteConditionInput, input: CreateNoteInput!): Note
+  createTask(condition: ModelTaskConditionInput, input: CreateTaskInput!): Task
+  deleteNote(condition: ModelNoteConditionInput, input: DeleteNoteInput!): Note
+  deleteTask(condition: ModelTaskConditionInput, input: DeleteTaskInput!): Task
+  updateNote(condition: ModelNoteConditionInput, input: UpdateNoteInput!): Note
+  updateTask(condition: ModelTaskConditionInput, input: UpdateTaskInput!): Task
+}
+
+type Note {
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  _version: Int!
+  content: String!
+  createdAt: AWSDateTime!
+  id: ID!
+  updatedAt: AWSDateTime!
+}
+
+type Query {
+  getNote(id: ID!): Note
+  getTask(id: ID!): Task
+  listNotes(filter: ModelNoteFilterInput, limit: Int, nextToken: String): ModelNoteConnection
+  listTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection
+  syncNotes(filter: ModelNoteFilterInput, lastSync: AWSTimestamp, limit: Int, nextToken: String): ModelNoteConnection
+  syncTasks(filter: ModelTaskFilterInput, lastSync: AWSTimestamp, limit: Int, nextToken: String): ModelTaskConnection
+}
+
+type Subscription {
+  onCreateNote(filter: ModelSubscriptionNoteFilterInput): Note @aws_subscribe(mutations : ["createNote"])
+  onCreateTask(filter: ModelSubscriptionTaskFilterInput): Task @aws_subscribe(mutations : ["createTask"])
+  onDeleteNote(filter: ModelSubscriptionNoteFilterInput): Note @aws_subscribe(mutations : ["deleteNote"])
+  onDeleteTask(filter: ModelSubscriptionTaskFilterInput): Task @aws_subscribe(mutations : ["deleteTask"])
+  onUpdateNote(filter: ModelSubscriptionNoteFilterInput): Note @aws_subscribe(mutations : ["updateNote"])
+  onUpdateTask(filter: ModelSubscriptionTaskFilterInput): Task @aws_subscribe(mutations : ["updateTask"])
+}
+
+type Task {
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp!
+  _version: Int!
+  createdAt: AWSDateTime!
+  description: String
+  id: ID!
+  status: String
+  title: String!
+  updatedAt: AWSDateTime!
+}
+
+enum ModelAttributeTypes {
+  _null
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+input CreateNoteInput {
+  _version: Int
+  content: String!
+  id: ID
+}
+
+input CreateTaskInput {
+  _version: Int
+  description: String
+  id: ID
+  status: String
+  title: String!
+}
+
+input DeleteNoteInput {
+  _version: Int
+  id: ID!
+}
+
+input DeleteTaskInput {
+  _version: Int
+  id: ID!
+}
+
+input ModelBooleanInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelFloatInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+}
+
+input ModelIDInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelNoteConditionInput {
+  _deleted: ModelBooleanInput
+  and: [ModelNoteConditionInput]
+  content: ModelStringInput
+  not: ModelNoteConditionInput
+  or: [ModelNoteConditionInput]
+}
+
+input ModelNoteFilterInput {
+  _deleted: ModelBooleanInput
+  and: [ModelNoteFilterInput]
+  content: ModelStringInput
+  id: ModelIDInput
+  not: ModelNoteFilterInput
+  or: [ModelNoteFilterInput]
+}
+
+input ModelSizeInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+}
+
+input ModelStringInput {
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  size: ModelSizeInput
+}
+
+input ModelSubscriptionBooleanInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input ModelSubscriptionFloatInput {
+  between: [Float]
+  eq: Float
+  ge: Float
+  gt: Float
+  in: [Float]
+  le: Float
+  lt: Float
+  ne: Float
+  notIn: [Float]
+}
+
+input ModelSubscriptionIDInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  in: [ID]
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+  notIn: [ID]
+}
+
+input ModelSubscriptionIntInput {
+  between: [Int]
+  eq: Int
+  ge: Int
+  gt: Int
+  in: [Int]
+  le: Int
+  lt: Int
+  ne: Int
+  notIn: [Int]
+}
+
+input ModelSubscriptionNoteFilterInput {
+  _deleted: ModelBooleanInput
+  and: [ModelSubscriptionNoteFilterInput]
+  content: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  or: [ModelSubscriptionNoteFilterInput]
+}
+
+input ModelSubscriptionStringInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  in: [String]
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+  notIn: [String]
+}
+
+input ModelSubscriptionTaskFilterInput {
+  _deleted: ModelBooleanInput
+  and: [ModelSubscriptionTaskFilterInput]
+  description: ModelSubscriptionStringInput
+  id: ModelSubscriptionIDInput
+  or: [ModelSubscriptionTaskFilterInput]
+  status: ModelSubscriptionStringInput
+  title: ModelSubscriptionStringInput
+}
+
+input ModelTaskConditionInput {
+  _deleted: ModelBooleanInput
+  and: [ModelTaskConditionInput]
+  description: ModelStringInput
+  not: ModelTaskConditionInput
+  or: [ModelTaskConditionInput]
+  status: ModelStringInput
+  title: ModelStringInput
+}
+
+input ModelTaskFilterInput {
+  _deleted: ModelBooleanInput
+  and: [ModelTaskFilterInput]
+  description: ModelStringInput
+  id: ModelIDInput
+  not: ModelTaskFilterInput
+  or: [ModelTaskFilterInput]
+  status: ModelStringInput
+  title: ModelStringInput
+}
+
+input UpdateNoteInput {
+  _version: Int
+  content: String
+  id: ID!
+}
+
+input UpdateTaskInput {
+  _version: Int
+  description: String
+  id: ID!
+  status: String
+  title: String
+}
